@@ -1,9 +1,11 @@
 package requests
 
 type SignupRequest struct {
-	Name string `form:"name" json:"name" xml:"name" binding:"required"`
-	Email string `form:"email" json:"email" xml:"email" binding:"required,email"`
- 	Password string `form:"password" json:"password" xml:"password" binding:"required"`
+	Name string `form:"name" json:"name" xml:"name" validate:"required"`
+	Email string `form:"email" json:"email" xml:"email" validate:"required,email"`
+ 	Password string `form:"password" json:"password" xml:"password" validate:"required"`
 }
 
-var VSignupRequest SignupRequest	
+func (m SignupRequest) Structure() string {
+	return "test"
+}

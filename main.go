@@ -47,7 +47,7 @@ func main() {
 
 	// Create a new fiber instance with custom config
 	app := fiber.New(fiber.Config{
-		// Override default error handler
+		// TIDAK DAPAT MENGHANDLE ERROR TERTENTU (TIDAK DIREKOMENDASIKAN)
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
 			// Status code defaults to 500
 			code := fiber.StatusInternalServerError
@@ -93,11 +93,24 @@ func main() {
 			}
 
 			// Return from handler
-			return nil
+			return ctx.Status(500).JSON(fiber.Map{
+				"message" : "Internal Server Error",
+			})
 		},
 	})
 
-	
+	// DAPAT MENGHANDLE ERROR APAPUN (RECOMENED)
+	// app.Use(func(c *fiber.Ctx) error {
+	// 	defer func() {
+	// 		if r := recover(); r != nil {          
+	// 			c.Status(500).JSON(fiber.Map{
+	// 				"message" : "Terjadi Kesalahan",
+	// 			})            
+	// 		}
+	// 	}()
+	// 	return c.Next()	
+	// })
+
 	app.Use(cors.New(cors.Config{
 		Next:             nil,
 		AllowOrigins:     "*",
@@ -134,10 +147,11 @@ func main() {
 
 	v1.Get("/status",func(c  *fiber.Ctx) error {
 		return c.Status(200).JSON(map[string]string{
-			"message" : "hello",
+			"message" : "active",
 		})
 	})
 
+	v1.Post("/register",controllers.Register)
 	v1.Post("/login",controllers.Login)
 
 	// JWT Middleware
@@ -145,6 +159,8 @@ func main() {
 		SigningKey: []byte("secret"),		
 	}))
 
+	v1.Post("/refresh-token",controllers.RefreshToken)
+	v1.Post("/logout",controllers.Logout)
 	v1.Get("/me", controllers.Me)
 
 	v1.Get("/data",controllers.IndexData)

@@ -167,7 +167,10 @@ func main() {
 	v1.Post("/profil/upload",controllers.UpdateProfilPhoto)
 
 	v1.Get("/data",controllers.IndexData)
-	// v1.Put("/data",controller)
+	// v1.POST("/data", controllers.StoreData)
+	// v1.GET("/data/:id", controllers.ShowData)
+	// v1.DELETE("/data/:id", controllers.DestoryData)
+	// v1.PUT("/data/:id", controllers.UpdateData)
 
 	app.Listen(os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT"))
 }

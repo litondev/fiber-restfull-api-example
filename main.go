@@ -10,6 +10,8 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/gofiber/fiber/v2/middleware/cors"	
 	"api-gofiber/test/config"
+	"api-gofiber/test/controllers"
+	jwtware "github.com/gofiber/jwt/v3"
 	"os"
 )
 
@@ -136,11 +138,16 @@ func main() {
 		})
 	})
 
-	v1.Get("/data",func(c *fiber.Ctx) error {
-		return c.JSON(map[string]string{
-			"message" : "hello",
-		})
-	})
+	v1.Post("/login",controllers.Login)
+
+	// JWT Middleware
+	app.Use(jwtware.New(jwtware.Config{
+		SigningKey: []byte("secret"),		
+	}))
+
+	v1.Get("/me", controllers.Me)
+
+	v1.Get("/data",controllers.IndexData)
 
 	app.Listen(os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT"))
 }

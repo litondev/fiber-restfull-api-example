@@ -163,7 +163,11 @@ func main() {
 	v1.Post("/logout",controllers.Logout)
 	v1.Get("/me", controllers.Me)
 
+	v1.Put("/profil/update",controllers.UpdateProfilData)
+	v1.Post("/profil/upload",controllers.UpdateProfilPhoto)
+
 	v1.Get("/data",controllers.IndexData)
+	// v1.Put("/data",controller)
 
 	app.Listen(os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT"))
 }
